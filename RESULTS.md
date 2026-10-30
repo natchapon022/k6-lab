@@ -20,12 +20,21 @@
 
 ## Part B
 
-1.
-2.
-3.
-4.
-5.
-6.
-7.
-8.
-9.
+1. Complete Part A results table as filled above.
+2. Because each iteration includes think time (`sleep`), a single user takes more than 1 second per iteration, keeping the total request rate below 5 req/s.
+3. Response times remained stable because the peak load (5 users) was well within the system's operational envelope.
+4. Response times returned to baseline within a few seconds after the spike ended.
+5. Metrics remained stable during the 10-minute run. A longer soak test could reveal memory leaks or connection pool exhaustion over time.
+6. Percentiles like p(95) better represent typical user experience without being skewed by outlier response times like averages are.
+7. 1. Variable network latency over public internet. 2. Fluctuating traffic from other users sharing the public site.
+8. Uncontrolled high-load testing against third-party sites can act as a Denial-of-Service (DoS) attack and violates service terms.
+9. 
+   - Vague requirement: "The feed page should load fast."
+   - Testable requirement: "95% of requests to the feed endpoint must finish within 800 ms with an error rate under 1%."
+   - K6 Thresholds:
+     ```javascript
+     thresholds: {
+       http_req_duration: ['p(95)<800'],
+       http_req_failed: ['rate<0.01'],
+     }
+     ```
